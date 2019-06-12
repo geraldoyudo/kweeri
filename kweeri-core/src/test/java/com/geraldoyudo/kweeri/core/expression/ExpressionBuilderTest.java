@@ -1,9 +1,9 @@
-package com.geraldoyudo.kweeri.core;
+package com.geraldoyudo.kweeri.core.expression;
 
 import org.junit.jupiter.api.Test;
 
-import static com.geraldoyudo.kweeri.core.ExpressionBuilder.expression;
-import static com.geraldoyudo.kweeri.core.ExpressionBuilder.value;
+import static com.geraldoyudo.kweeri.core.expression.ExpressionBuilder.expression;
+import static com.geraldoyudo.kweeri.core.expression.ExpressionBuilder.value;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ExpressionBuilderTest {

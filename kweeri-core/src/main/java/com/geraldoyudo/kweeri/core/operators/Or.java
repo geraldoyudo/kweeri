@@ -1,14 +1,14 @@
 package com.geraldoyudo.kweeri.core.operators;
 
-import com.geraldoyudo.kweeri.core.Expression;
+import com.geraldoyudo.kweeri.core.expression.Expression;
 
 public class Or extends AbstractBooleanOperator {
     public static final long ID = 1L;
 
     @Override
-    protected boolean doEvaluate(Expression<?> left, Expression<?> right) {
+    protected boolean doEvaluate(Object context, Expression<?> left, Expression<?> right) {
 
-        return left.evaluateToBoolean() || right.evaluateToBoolean();
+        return left.evaluateToBoolean(context) || right.evaluateToBoolean(context);
     }
 
     @Override

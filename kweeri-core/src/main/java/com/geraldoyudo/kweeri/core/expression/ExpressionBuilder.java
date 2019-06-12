@@ -1,4 +1,4 @@
-package com.geraldoyudo.kweeri.core;
+package com.geraldoyudo.kweeri.core.expression;
 
 import com.geraldoyudo.kweeri.core.operators.And;
 import com.geraldoyudo.kweeri.core.operators.IsEqualTo;

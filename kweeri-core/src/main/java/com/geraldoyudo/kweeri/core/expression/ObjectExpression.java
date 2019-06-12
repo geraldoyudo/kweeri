@@ -1,4 +1,4 @@
-package com.geraldoyudo.kweeri.core;
+package com.geraldoyudo.kweeri.core.expression;
 
 import java.util.Objects;
 
@@ -10,7 +10,7 @@ public class ObjectExpression implements Expression<Object> {
     }
 
     @Override
-    public Object evaluate() {
+    public Object evaluate(Object context) {
         return object;
     }
 
