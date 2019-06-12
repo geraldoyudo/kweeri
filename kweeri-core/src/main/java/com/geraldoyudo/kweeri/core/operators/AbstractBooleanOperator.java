@@ -2,6 +2,8 @@ package com.geraldoyudo.kweeri.core.operators;
 
 import com.geraldoyudo.kweeri.core.Expression;
 
+import java.util.Objects;
+
 public abstract class AbstractBooleanOperator implements BooleanOperator {
     private Expression<?> left;
     private Expression<?> right;
@@ -28,4 +30,18 @@ public abstract class AbstractBooleanOperator implements BooleanOperator {
     }
 
     protected abstract boolean doEvaluate(Expression<?> left, Expression<?> right);
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        AbstractBooleanOperator that = (AbstractBooleanOperator) object;
+        return Objects.equals(left, that.left) &&
+                Objects.equals(right, that.right);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(operatorId(), left, right);
+    }
 }

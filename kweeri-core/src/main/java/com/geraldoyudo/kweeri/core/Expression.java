@@ -2,7 +2,9 @@ package com.geraldoyudo.kweeri.core;
 
 import com.geraldoyudo.kweeri.core.boolresolver.BooleanResolver;
 
-public interface Expression<T> {
+import java.io.Serializable;
+
+public interface Expression<T> extends Serializable {
 
     T evaluate();
 

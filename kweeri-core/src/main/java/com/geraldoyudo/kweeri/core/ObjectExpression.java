@@ -1,5 +1,7 @@
 package com.geraldoyudo.kweeri.core;
 
+import java.util.Objects;
+
 public class ObjectExpression implements Expression<Object> {
     private Object object;
 
@@ -10,5 +12,18 @@ public class ObjectExpression implements Expression<Object> {
     @Override
     public Object evaluate() {
         return object;
+    }
+
+    @Override
+    public boolean equals(Object object1) {
+        if (this == object1) return true;
+        if (object1 == null || getClass() != object1.getClass()) return false;
+        ObjectExpression that = (ObjectExpression) object1;
+        return Objects.equals(object, that.object);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(object);
     }
 }
