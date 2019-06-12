@@ -1,2 +1,3 @@
 # kweeri
-Library for generating generic query
+
+Library for generating generic queries
