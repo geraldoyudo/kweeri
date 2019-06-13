@@ -1,6 +1,8 @@
 package com.geraldoyudo.kweeri.core.operators;
 
-import com.geraldoyudo.kweeri.core.Expression;
+import com.geraldoyudo.kweeri.core.expression.Expression;
+
+import java.util.Objects;
 
 public abstract class AbstractBooleanOperator implements BooleanOperator {
     private Expression<?> left;
@@ -17,15 +19,29 @@ public abstract class AbstractBooleanOperator implements BooleanOperator {
     }
 
     @Override
-    public Boolean evaluate() {
+    public Boolean evaluate(Object context) {
         if (left == null) {
             throw new IllegalArgumentException("No value to the left of operator");
         }
         if (right == null) {
             throw new IllegalArgumentException("No value to the right of operator");
         }
-        return doEvaluate(left, right);
+        return doEvaluate(context, left, right);
     }
 
-    protected abstract boolean doEvaluate(Expression<?> left, Expression<?> right);
+    protected abstract boolean doEvaluate(Object context, Expression<?> left, Expression<?> right);
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        AbstractBooleanOperator that = (AbstractBooleanOperator) object;
+        return Objects.equals(left, that.left) &&
+                Objects.equals(right, that.right);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(operatorId(), left, right);
+    }
 }

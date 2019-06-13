@@ -1,7 +1,7 @@
 package com.geraldoyudo.kweeri.core.operators;
 
-import com.geraldoyudo.kweeri.core.Expression;
-import com.geraldoyudo.kweeri.core.ObjectExpression;
+import com.geraldoyudo.kweeri.core.expression.Expression;
+import com.geraldoyudo.kweeri.core.expression.ObjectExpression;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

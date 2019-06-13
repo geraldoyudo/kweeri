@@ -1,4 +1,4 @@
-package com.geraldoyudo.kweeri.core;
+package com.geraldoyudo.kweeri.core.expression;
 
 import com.geraldoyudo.kweeri.core.operators.And;
 import com.geraldoyudo.kweeri.core.operators.IsEqualTo;
@@ -53,6 +53,10 @@ public class ExpressionBuilder {
 
     public static ExpressionBuilder expression(ExpressionBuilder expressionBuilder) {
         return new ExpressionBuilder(expressionBuilder.build());
+    }
+
+    public static ExpressionBuilder property(String property) {
+        return new ExpressionBuilder(new PropertyExpression(property));
     }
 
     public Expression build() {
