@@ -4,5 +4,5 @@ import com.geraldoyudo.kweeri.core.expression.Expression;
 
 public interface QuerySerializer {
 
-    Expression serialize(String queryString);
+    Expression deSerialize(String queryString);
 }

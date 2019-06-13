@@ -50,7 +50,7 @@ class BasicQuerySerializerTest {
     @ParameterizedTest
     @MethodSource("serializeProvider")
     void serialize(String queryString, Expression result) {
-        assertEquals(result, basicQuerySerializer.serialize(queryString));
+        assertEquals(result, basicQuerySerializer.deSerialize(queryString));
     }
 
     private static Stream<Arguments> serializeProvider() {
@@ -133,7 +133,7 @@ class BasicQuerySerializerTest {
     @ParameterizedTest
     @MethodSource("deSerializeProvider")
     void deSerialize(String result, Expression expression) {
-        assertEquals(result, basicQuerySerializer.deserialize(expression));
+        assertEquals(result, basicQuerySerializer.serialize(expression));
     }
 
     private static Stream<Arguments> deSerializeProvider() {

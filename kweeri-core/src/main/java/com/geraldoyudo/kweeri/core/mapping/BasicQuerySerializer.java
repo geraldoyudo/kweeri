@@ -25,6 +25,14 @@ public class BasicQuerySerializer implements QuerySerializer, QueryDeserializer 
         return expressionDefinition;
     }
 
+    public ValueParserAdapter getValueParserAdapter() {
+        return valueParserAdapter;
+    }
+
+    public ValuePrinterAdapter getValuePrinterAdapter() {
+        return valuePrinterAdapter;
+    }
+
     public void setExpressionDefinition(BasicQueryExpressionDefinition expressionDefinition) {
         this.expressionDefinition = expressionDefinition;
     }
@@ -46,7 +54,7 @@ public class BasicQuerySerializer implements QuerySerializer, QueryDeserializer 
     }
 
     @Override
-    public Expression serialize(String queryString) {
+    public Expression deSerialize(String queryString) {
         String formattedQueryString = formatQueryString(queryString);
         Scanner scanner = new Scanner(formattedQueryString);
         scanner.useDelimiter(" ");
@@ -93,7 +101,7 @@ public class BasicQuerySerializer implements QuerySerializer, QueryDeserializer 
         if (scanner.hasNext(openingPattern)) {
             String subExpression = getSubExpression(scanner);
             scanner.useDelimiter(" ");
-            firstExpression = serialize(subExpression);
+            firstExpression = deSerialize(subExpression);
         } else {
             Pattern valuePattern = valueParserAdapter.getCombinedPattern();
             if (scanner.hasNext(valuePattern)) {
@@ -148,13 +156,13 @@ public class BasicQuerySerializer implements QuerySerializer, QueryDeserializer 
     }
 
     @Override
-    public String deserialize(Expression expression) {
+    public String serialize(Expression expression) {
         StringBuilder builder = new StringBuilder();
-        deserialize(expression, builder);
+        serialize(expression, builder);
         return builder.toString();
     }
 
-    private void deserialize(Expression expression, StringBuilder stringBuilder) {
+    private void serialize(Expression expression, StringBuilder stringBuilder) {
         try {
             if (expression instanceof Operator) {
                 Operator operator = (Operator) expression;
@@ -187,10 +195,10 @@ public class BasicQuerySerializer implements QuerySerializer, QueryDeserializer 
     private void appendExpression(Expression expression, StringBuilder builder) {
         if (expression instanceof Operator) {
             builder.append(expressionDefinition.getOpening()).append(" ");
-            deserialize(expression, builder);
+            serialize(expression, builder);
             builder.append(" ").append(expressionDefinition.getClosing());
         } else {
-            deserialize(expression, builder);
+            serialize(expression, builder);
         }
     }
 }
