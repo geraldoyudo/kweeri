@@ -13,6 +13,6 @@ class BasicQueryOperatorDefinitionsTest {
 
     @Test
     void getOperatorsPattern() {
-        assertEquals("or|and", operatorDefinitions.getOperatorsPattern());
+        assertEquals("or|and", operatorDefinitions.getBinaryOperatorsPattern());
     }
 }

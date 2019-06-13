@@ -4,7 +4,7 @@ import com.geraldoyudo.kweeri.core.expression.Expression;
 
 import java.util.Objects;
 
-public abstract class AbstractBooleanUnaryOperator implements BooleanOperator {
+public abstract class AbstractBooleanUnaryOperator implements BooleanOperator, UnaryOperator {
     private Expression<?> left;
 
     @Override

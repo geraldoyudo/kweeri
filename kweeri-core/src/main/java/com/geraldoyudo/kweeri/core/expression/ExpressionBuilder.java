@@ -1,9 +1,6 @@
 package com.geraldoyudo.kweeri.core.expression;
 
-import com.geraldoyudo.kweeri.core.operators.And;
-import com.geraldoyudo.kweeri.core.operators.IsEqualTo;
-import com.geraldoyudo.kweeri.core.operators.Operator;
-import com.geraldoyudo.kweeri.core.operators.Or;
+import com.geraldoyudo.kweeri.core.operators.*;
 
 public class ExpressionBuilder {
     private Expression root;
@@ -26,6 +23,13 @@ public class ExpressionBuilder {
 
     public ExpressionBuilder or(ExpressionBuilder expressionBuilder) {
         return addExpressionToOperator(expressionBuilder.build(), new Or());
+    }
+
+    public ExpressionBuilder negate(){
+        Not not = new Not();
+        not.setLeft(root);
+        this.root = not;
+        return this;
     }
 
     public ExpressionBuilder equalTo(Expression expression) {

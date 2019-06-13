@@ -4,7 +4,9 @@ import com.geraldoyudo.kweeri.core.expression.Expression;
 import com.geraldoyudo.kweeri.core.mapping.valueparsers.UnrecognizedValueExpression;
 import com.geraldoyudo.kweeri.core.mapping.valueparsers.ValueParserAdapter;
 import com.geraldoyudo.kweeri.core.mapping.valueprinter.ValuePrinterAdapter;
+import com.geraldoyudo.kweeri.core.operators.BinaryOperator;
 import com.geraldoyudo.kweeri.core.operators.Operator;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -49,12 +51,10 @@ public class BasicQuerySerializer implements QuerySerializer, QueryDeserializer 
         Scanner scanner = new Scanner(formattedQueryString);
         scanner.useDelimiter(" ");
         Expression firstExpression = getExpression(scanner);
-        String operatorsPattern = operatorDefinitions.getOperatorsPattern();
+        String operatorsPattern = operatorDefinitions.getBinaryOperatorsPattern();
         while (scanner.hasNext(operatorsPattern)) {
-            String operatorPattern = scanner.next(operatorsPattern);
-            long operatorId = operatorDefinitions.toOperatorId(operatorPattern)
-                    .orElseThrow(() -> new IllegalArgumentException("invalid operation"));
-            Operator operator = getOperatorFromId(operatorId);
+            String operatorString = scanner.next(operatorsPattern);
+            Operator operator = getOperatorFromString(operatorString);
             Expression secondExpression = getExpression(scanner);
             operator.setLeft(firstExpression);
             operator.setRight(secondExpression);
@@ -63,11 +63,17 @@ public class BasicQuerySerializer implements QuerySerializer, QueryDeserializer 
         return firstExpression;
     }
 
+    private Operator getOperatorFromString(String operatorPattern) {
+        long operatorId = operatorDefinitions.toOperatorId(operatorPattern)
+                .orElseThrow(() -> new IllegalArgumentException("invalid operation"));
+        return getOperatorFromId(operatorId);
+    }
+
     String formatQueryString(String queryString) {
         Pattern openingPattern = Pattern.compile(String.format("([\\\\%s])", expressionDefinition.getOpening()));
         Pattern closingPattern = Pattern.compile(String.format("([\\\\%s])", expressionDefinition.getClosing()));
         return queryString
-                .replaceAll(String.format("\\b(%s)\\b", operatorDefinitions.getOperatorsPattern()), " $1 ")
+                .replaceAll(String.format("\\b(%s)\\b", operatorDefinitions.getBinaryOperatorsPattern()), " $1 ")
                 .replaceAll(openingPattern.pattern(), " $1 ")
                 .replaceAll(closingPattern.pattern(), " $1 ")
                 .replaceAll(WHITE_SPACE_NOT_IN_QUOTES.pattern(), " ")
@@ -77,6 +83,13 @@ public class BasicQuerySerializer implements QuerySerializer, QueryDeserializer 
     private Expression getExpression(Scanner scanner) {
         Expression firstExpression;
         Pattern openingPattern = Pattern.compile(String.format("[\\\\%s]", expressionDefinition.getOpening()));
+        String unaryOperatorPattern = operatorDefinitions.getUnaryOperatorsPattern();
+        Operator unaryOperator = null;
+        if (!StringUtils.isEmpty(unaryOperatorPattern) && scanner.hasNext(unaryOperatorPattern)) {
+            String unaryOperatorString = scanner.next(unaryOperatorPattern);
+            unaryOperator = getOperatorFromString(unaryOperatorString);
+        }
+
         if (scanner.hasNext(openingPattern)) {
             String subExpression = getSubExpression(scanner);
             scanner.useDelimiter(" ");
@@ -89,7 +102,12 @@ public class BasicQuerySerializer implements QuerySerializer, QueryDeserializer 
                 throw new IllegalArgumentException("Invalid expression");
             }
         }
-        return firstExpression;
+        if (unaryOperator != null) {
+            unaryOperator.setLeft(firstExpression);
+            return unaryOperator;
+        } else {
+            return firstExpression;
+        }
     }
 
 
@@ -140,20 +158,30 @@ public class BasicQuerySerializer implements QuerySerializer, QueryDeserializer 
         try {
             if (expression instanceof Operator) {
                 Operator operator = (Operator) expression;
-                appendExpression(operator.getLeft(), stringBuilder);
-                stringBuilder.append(" ");
-                stringBuilder.append(
-                        operatorDefinitions.toOperatorString(operator.operatorId())
-                                .orElseThrow(() -> new QueryProcessingException("cannot recognize operator to print"))
-                );
-                stringBuilder.append(" ");
-                appendExpression(operator.getRight(), stringBuilder);
+                if(operator instanceof BinaryOperator) {
+                    appendExpression(operator.getLeft(), stringBuilder);
+                    stringBuilder.append(" ");
+                    appendOperator(stringBuilder, operator);
+                    stringBuilder.append(" ");
+                    appendExpression(operator.getRight(), stringBuilder);
+                }else {
+                    appendOperator(stringBuilder, operator);
+                    stringBuilder.append(" ");
+                    appendExpression(operator.getLeft(), stringBuilder);
+                }
             } else {
                 stringBuilder.append(valuePrinterAdapter.print(expression));
             }
         } catch (UnrecognizedValueExpression ex) {
             throw new QueryProcessingException("unrecognized expression. cannot print");
         }
+    }
+
+    private void appendOperator(StringBuilder stringBuilder, Operator operator) {
+        stringBuilder.append(
+                operatorDefinitions.toOperatorString(operator.operatorId())
+                        .orElseThrow(() -> new QueryProcessingException("cannot recognize operator to print"))
+        );
     }
 
     private void appendExpression(Expression expression, StringBuilder builder) {

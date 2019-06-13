@@ -8,6 +8,7 @@ import com.geraldoyudo.kweeri.core.mapping.valueprinter.StringPrinter;
 import com.geraldoyudo.kweeri.core.mapping.valueprinter.ValuePrinterAdapter;
 import com.geraldoyudo.kweeri.core.operators.And;
 import com.geraldoyudo.kweeri.core.operators.IsEqualTo;
+import com.geraldoyudo.kweeri.core.operators.Not;
 import com.geraldoyudo.kweeri.core.operators.Or;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,7 @@ class BasicQuerySerializerTest {
                 .defineOperator(new And(), "and")
                 .defineOperator(new Or(), "or")
                 .defineOperator(new IsEqualTo(), "=")
+                .defineOperator(new Not(), "not")
         );
         basicQuerySerializer.setValueParserAdapter(
                 new ValueParserAdapter()
@@ -56,9 +58,16 @@ class BasicQuerySerializerTest {
                 arguments("1 = 1", value(1).equalTo(value(1)).build()),
                 arguments("1=1", value(1).equalTo(value(1)).build()),
                 arguments("true", value(true).build()),
+                arguments("not true", value(true).negate().build()),
                 arguments("false", value(false).build()),
+                arguments("not false", value(false).negate().build()),
                 arguments("true", value(true).build()),
                 arguments("'three' = 'four'", value("three").equalTo(value("four")).build()),
+                arguments("not (color = 'red') and (nationality = 'nigerian')",
+                        expression(property("color").equalTo(value("red"))).negate()
+                                .and(expression(property("nationality").equalTo(value("nigerian"))))
+                                .build()
+                ),
                 arguments("(color = 'red') and (nationality = 'nigerian')",
                         expression(property("color").equalTo(value("red")))
                                 .and(expression(property("nationality").equalTo(value("nigerian"))))
@@ -72,6 +81,12 @@ class BasicQuerySerializerTest {
                 arguments("(color = 'red') and (nationality = 'nigerian') and (gender = 'female')",
                         expression(property("color").equalTo(value("red")))
                                 .and(expression(property("nationality").equalTo(value("nigerian"))))
+                                .and(expression(property("gender").equalTo(value("female"))))
+                                .build()
+                ),
+                arguments("(color = 'red') and not (nationality = 'nigerian') and (gender = 'female')",
+                        expression(property("color").equalTo(value("red")))
+                                .and(expression(property("nationality").equalTo(value("nigerian")).negate()))
                                 .and(expression(property("gender").equalTo(value("female"))))
                                 .build()
                 ),
@@ -127,6 +142,12 @@ class BasicQuerySerializerTest {
                 arguments("( color = 'red' ) and ( nationality = 'nigerian' )", expression(
                         property("color").equalTo(value("red"))
                 ).and(
+                        property("nationality").equalTo(value("nigerian"))
+                        ).build()
+                ),
+                arguments("( not ( color = 'red' ) ) and ( nationality = 'nigerian' )", expression(
+                        property("color").equalTo(value("red"))
+                        ).negate().and(
                         property("nationality").equalTo(value("nigerian"))
                         ).build()
                 ),
