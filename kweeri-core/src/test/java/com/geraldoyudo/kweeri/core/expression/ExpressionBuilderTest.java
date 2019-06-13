@@ -116,4 +116,27 @@ public class ExpressionBuilderTest {
                         .build().evaluate()
         );
     }
+
+    @Test
+    public void notTrueShouldBeFalse() {
+        assertEquals(false,
+                value(true).negate().build().evaluate()
+        );
+    }
+
+    @Test
+    public void notFalseShouldBeTrue() {
+        assertEquals(true,
+                value(false).negate().build().evaluate()
+        );
+    }
+
+    @Test
+    public void NotTwoEqualToFiveOrThreeEqualToMinusThreeShouldEvaluateToTrue() {
+        assertEquals(true,
+                value(2).equalTo(value(5))
+                        .or(value(3).equalTo(value(-3))).negate()
+                        .build().evaluate()
+        );
+    }
 }

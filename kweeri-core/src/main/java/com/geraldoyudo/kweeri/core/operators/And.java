@@ -2,7 +2,7 @@ package com.geraldoyudo.kweeri.core.operators;
 
 import com.geraldoyudo.kweeri.core.expression.Expression;
 
-public class And extends AbstractBooleanOperator {
+public class And extends AbstractBooleanBinaryOperator {
     public static final long ID = 2L;
 
     @Override

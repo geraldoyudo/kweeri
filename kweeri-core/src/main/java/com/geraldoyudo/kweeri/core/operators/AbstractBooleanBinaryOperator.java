@@ -4,7 +4,7 @@ import com.geraldoyudo.kweeri.core.expression.Expression;
 
 import java.util.Objects;
 
-public abstract class AbstractBooleanOperator implements BooleanOperator {
+public abstract class AbstractBooleanBinaryOperator implements BooleanOperator, BinaryOperator {
     private Expression<?> left;
     private Expression<?> right;
 
@@ -45,7 +45,7 @@ public abstract class AbstractBooleanOperator implements BooleanOperator {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        AbstractBooleanOperator that = (AbstractBooleanOperator) object;
+        AbstractBooleanBinaryOperator that = (AbstractBooleanBinaryOperator) object;
         return Objects.equals(left, that.left) &&
                 Objects.equals(right, that.right);
     }
