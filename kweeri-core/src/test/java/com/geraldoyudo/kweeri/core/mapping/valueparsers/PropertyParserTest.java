@@ -40,6 +40,8 @@ class PropertyParserTest {
             "child.property.another,true",
             "child,true",
             "child,true",
+            "color_property,true",
+            "favorite-color,true",
             "\"child.property\",false",
             "\"child.property.another\",false",
             "\"arbitrary sd 83 string\",false"

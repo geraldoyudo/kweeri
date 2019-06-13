@@ -6,7 +6,7 @@ import com.geraldoyudo.kweeri.core.expression.PropertyExpression;
 import java.util.regex.Pattern;
 
 public class PropertyParser implements ValueParser {
-    private static Pattern pattern = Pattern.compile("[\\w_\\d]+(\\.[\\w_\\d]+)*");
+    private static Pattern pattern = Pattern.compile("[\\w_\\-\\d]+(\\.[\\w_\\-\\d]+)*");
 
     @Override
     public Expression parse(String object) {
