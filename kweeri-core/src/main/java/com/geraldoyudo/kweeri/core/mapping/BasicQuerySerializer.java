@@ -3,19 +3,21 @@ package com.geraldoyudo.kweeri.core.mapping;
 import com.geraldoyudo.kweeri.core.expression.Expression;
 import com.geraldoyudo.kweeri.core.mapping.valueparsers.UnrecognizedValueExpression;
 import com.geraldoyudo.kweeri.core.mapping.valueparsers.ValueParserAdapter;
+import com.geraldoyudo.kweeri.core.mapping.valueprinter.ValuePrinterAdapter;
 import com.geraldoyudo.kweeri.core.operators.Operator;
 
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class BasicQuerySerializer implements QuerySerializer {
+public class BasicQuerySerializer implements QuerySerializer, QueryDeserializer {
     static Pattern WHITE_SPACE_NOT_IN_QUOTES = Pattern.compile("\\s+(?=(?:[^\\'\"]*[\\'\"][^\\'\"]*[\\'\"])*[^\\'\"]*$)");
-    static Pattern PROPERTY_PATTERN = Pattern.compile("[A-Za-z0-9\\.]+");
     private BasicQueryExpressionDefinition expressionDefinition = new BasicQueryExpressionDefinition();
 
     private BasicQueryOperatorDefinitions operatorDefinitions = new BasicQueryOperatorDefinitions();
 
     private ValueParserAdapter valueParserAdapter = new ValueParserAdapter();
+
+    private ValuePrinterAdapter valuePrinterAdapter = new ValuePrinterAdapter();
 
     public BasicQueryExpressionDefinition getExpressionDefinition() {
         return expressionDefinition;
@@ -37,30 +39,13 @@ public class BasicQuerySerializer implements QuerySerializer {
         this.valueParserAdapter = valueParserAdapter;
     }
 
+    public void setValuePrinterAdapter(ValuePrinterAdapter valuePrinterAdapter) {
+        this.valuePrinterAdapter = valuePrinterAdapter;
+    }
+
     @Override
     public Expression serialize(String queryString) {
         String formattedQueryString = formatQueryString(queryString);
-        /*
-        1. get first character
-        2. if first character is bracket,
-            a. get the whole string till the ending of the bracket
-            b. call serialize recursively to get expression
-        3. if first token delimited by an operator is a value expression
-            a. serialize value to value expression
-        4. if first token delimited by an operator is a property expression
-            a. serialize property expression
-        5. if next operator exists read next operator token and create operator
-        6. if next character is a bracket
-            a. get the whole string till the ending of the brket
-            b. call serialize recursively to get the expression
-        7. if next token till operator delimeter is a value expression
-            a. serialize value to value expression
-        8. if next token is property expression
-            a. serialize to property expression
-        9. set left and right of operator to first and second expression
-        10. set resultExpression to the operator result expression
-        11. Go to step 5
-         */
         Scanner scanner = new Scanner(formattedQueryString);
         scanner.useDelimiter(" ");
         Expression firstExpression = getExpression(scanner);
@@ -142,5 +127,42 @@ public class BasicQuerySerializer implements QuerySerializer {
     private Operator getOperatorFromId(long id) {
         return operatorDefinitions.createOperator(id)
                 .orElseThrow(() -> new QueryProcessingException("Unknown query operator"));
+    }
+
+    @Override
+    public String deserialize(Expression expression) {
+        StringBuilder builder = new StringBuilder();
+        deserialize(expression, builder);
+        return builder.toString();
+    }
+
+    private void deserialize(Expression expression, StringBuilder stringBuilder) {
+        try {
+            if (expression instanceof Operator) {
+                Operator operator = (Operator) expression;
+                appendExpression(operator.getLeft(), stringBuilder);
+                stringBuilder.append(" ");
+                stringBuilder.append(
+                        operatorDefinitions.toOperatorString(operator.operatorId())
+                                .orElseThrow(() -> new QueryProcessingException("cannot recognize operator to print"))
+                );
+                stringBuilder.append(" ");
+                appendExpression(operator.getRight(), stringBuilder);
+            } else {
+                stringBuilder.append(valuePrinterAdapter.print(expression));
+            }
+        } catch (UnrecognizedValueExpression ex) {
+            throw new QueryProcessingException("unrecognized expression. cannot print");
+        }
+    }
+
+    private void appendExpression(Expression expression, StringBuilder builder) {
+        if (expression instanceof Operator) {
+            builder.append(expressionDefinition.getOpening()).append(" ");
+            deserialize(expression, builder);
+            builder.append(" ").append(expressionDefinition.getClosing());
+        } else {
+            deserialize(expression, builder);
+        }
     }
 }

@@ -29,6 +29,16 @@ public abstract class AbstractBooleanOperator implements BooleanOperator {
         return doEvaluate(context, left, right);
     }
 
+    @Override
+    public Expression<?> getLeft() {
+        return left;
+    }
+
+    @Override
+    public Expression<?> getRight() {
+        return right;
+    }
+
     protected abstract boolean doEvaluate(Object context, Expression<?> left, Expression<?> right);
 
     @Override
