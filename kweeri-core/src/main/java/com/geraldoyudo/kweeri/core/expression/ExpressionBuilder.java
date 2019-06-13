@@ -55,6 +55,10 @@ public class ExpressionBuilder {
         return new ExpressionBuilder(expressionBuilder.build());
     }
 
+    public static ExpressionBuilder property(String property) {
+        return new ExpressionBuilder(new PropertyExpression(property));
+    }
+
     public Expression build() {
         return root;
     }

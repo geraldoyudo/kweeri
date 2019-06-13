@@ -2,12 +2,14 @@ package com.geraldoyudo.kweeri.core.operators;
 
 import com.geraldoyudo.kweeri.core.expression.Expression;
 import com.geraldoyudo.kweeri.core.expression.ObjectExpression;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
+import static com.geraldoyudo.kweeri.core.expression.ExpressionBuilder.value;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
@@ -41,5 +43,17 @@ class AndTest {
 
     private static Expression object(Object object) {
         return new ObjectExpression(object);
+    }
+
+    @Test
+    public void testEquals(){
+        assertEquals(
+                value("one")
+                .equalTo(value("three"))
+                .build(),
+                value("one")
+                .equalTo(value("three"))
+                .build()
+        );
     }
 }

@@ -25,4 +25,12 @@ public class BasicQueryExpressionDefinition {
     boolean closingEquals(String closing) {
         return this.closing.equals(closing);
     }
+
+    public String getOpening() {
+        return opening;
+    }
+
+    public String getClosing() {
+        return closing;
+    }
 }
