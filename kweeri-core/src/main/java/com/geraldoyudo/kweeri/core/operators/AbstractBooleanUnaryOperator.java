@@ -4,9 +4,8 @@ import com.geraldoyudo.kweeri.core.expression.Expression;
 
 import java.util.Objects;
 
-public abstract class AbstractBooleanOperator implements BooleanOperator {
+public abstract class AbstractBooleanUnaryOperator implements BooleanOperator {
     private Expression<?> left;
-    private Expression<?> right;
 
     @Override
     public void setLeft(Expression<?> expression) {
@@ -15,7 +14,7 @@ public abstract class AbstractBooleanOperator implements BooleanOperator {
 
     @Override
     public void setRight(Expression<?> expression) {
-        this.right = expression;
+        throw new IllegalArgumentException("Not supported");
     }
 
     @Override
@@ -23,10 +22,7 @@ public abstract class AbstractBooleanOperator implements BooleanOperator {
         if (left == null) {
             throw new IllegalArgumentException("No value to the left of operator");
         }
-        if (right == null) {
-            throw new IllegalArgumentException("No value to the right of operator");
-        }
-        return doEvaluate(context, left, right);
+        return doEvaluate(context, left);
     }
 
     @Override
@@ -36,22 +32,21 @@ public abstract class AbstractBooleanOperator implements BooleanOperator {
 
     @Override
     public Expression<?> getRight() {
-        return right;
+        throw new IllegalArgumentException("Right operator not supported");
     }
 
-    protected abstract boolean doEvaluate(Object context, Expression<?> left, Expression<?> right);
+    protected abstract boolean doEvaluate(Object context, Expression<?> expression);
 
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        AbstractBooleanOperator that = (AbstractBooleanOperator) object;
-        return Objects.equals(left, that.left) &&
-                Objects.equals(right, that.right);
+        AbstractBooleanUnaryOperator that = (AbstractBooleanUnaryOperator) object;
+        return Objects.equals(left, that.left);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(operatorId(), left, right);
+        return Objects.hash(operatorId(), left);
     }
 }
