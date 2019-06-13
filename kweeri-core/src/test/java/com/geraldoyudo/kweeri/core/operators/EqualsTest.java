@@ -12,17 +12,17 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-class IsEqualToTest {
-    private final IsEqualTo isEqualTo = new IsEqualTo();
+class EqualsTest {
+    private final Equals equals = new Equals();
 
     @ParameterizedTest
     @MethodSource("doEvaluateProvider")
     void doEvaluate(Expression left, Expression right, boolean result) {
-        isEqualTo.setLeft(left);
-        isEqualTo.setRight(right);
+        equals.setLeft(left);
+        equals.setRight(right);
         assertAll(
-                () -> assertEquals(result, isEqualTo.evaluate()),
-                () -> assertEquals(result, isEqualTo.evaluateToBoolean())
+                () -> assertEquals(result, equals.evaluate()),
+                () -> assertEquals(result, equals.evaluateToBoolean())
         );
     }
 

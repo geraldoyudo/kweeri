@@ -7,7 +7,7 @@ import com.geraldoyudo.kweeri.core.mapping.valueprinter.PropertyPrinter;
 import com.geraldoyudo.kweeri.core.mapping.valueprinter.StringPrinter;
 import com.geraldoyudo.kweeri.core.mapping.valueprinter.ValuePrinterAdapter;
 import com.geraldoyudo.kweeri.core.operators.And;
-import com.geraldoyudo.kweeri.core.operators.IsEqualTo;
+import com.geraldoyudo.kweeri.core.operators.Equals;
 import com.geraldoyudo.kweeri.core.operators.Not;
 import com.geraldoyudo.kweeri.core.operators.Or;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +34,7 @@ class BasicQuerySerializerTest {
         basicQuerySerializer.setOperatorDefinitions(new BasicQueryOperatorDefinitions()
                 .defineOperator(new And(), "and")
                 .defineOperator(new Or(), "or")
-                .defineOperator(new IsEqualTo(), "=")
+                .defineOperator(new Equals(), "=")
                 .defineOperator(new Not(), "not")
         );
         basicQuerySerializer.setValueParserAdapter(

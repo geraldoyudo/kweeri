@@ -2,7 +2,7 @@ package com.geraldoyudo.kweeri.core.operators;
 
 import com.geraldoyudo.kweeri.core.expression.Expression;
 
-public class IsEqualTo extends AbstractBooleanBinaryOperator implements ComparisonOperator {
+public class Equals extends AbstractBooleanBinaryOperator implements ComparisonOperator {
     public static final long ID = 3L;
 
     @Override

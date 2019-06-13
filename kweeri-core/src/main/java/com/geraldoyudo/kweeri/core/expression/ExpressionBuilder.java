@@ -33,11 +33,11 @@ public class ExpressionBuilder {
     }
 
     public ExpressionBuilder equalTo(Expression expression) {
-        return addExpressionToOperator(expression, new IsEqualTo());
+        return addExpressionToOperator(expression, new Equals());
     }
 
     public ExpressionBuilder equalTo(ExpressionBuilder expressionBuilder) {
-        return addExpressionToOperator(expressionBuilder.build(), new IsEqualTo());
+        return addExpressionToOperator(expressionBuilder.build(), new Equals());
     }
 
     private ExpressionBuilder addExpressionToOperator(Expression expression, Operator operator) {
