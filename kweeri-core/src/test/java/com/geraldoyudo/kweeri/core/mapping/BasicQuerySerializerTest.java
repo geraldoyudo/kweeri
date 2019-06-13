@@ -2,6 +2,10 @@ package com.geraldoyudo.kweeri.core.mapping;
 
 import com.geraldoyudo.kweeri.core.expression.Expression;
 import com.geraldoyudo.kweeri.core.mapping.valueparsers.*;
+import com.geraldoyudo.kweeri.core.mapping.valueprinter.ObjectPrinter;
+import com.geraldoyudo.kweeri.core.mapping.valueprinter.PropertyPrinter;
+import com.geraldoyudo.kweeri.core.mapping.valueprinter.StringPrinter;
+import com.geraldoyudo.kweeri.core.mapping.valueprinter.ValuePrinterAdapter;
 import com.geraldoyudo.kweeri.core.operators.And;
 import com.geraldoyudo.kweeri.core.operators.IsEqualTo;
 import com.geraldoyudo.kweeri.core.operators.Or;
@@ -12,7 +16,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Scanner;
 import java.util.stream.Stream;
 
 import static com.geraldoyudo.kweeri.core.expression.ExpressionBuilder.*;
@@ -35,6 +38,10 @@ class BasicQuerySerializerTest {
         basicQuerySerializer.setValueParserAdapter(
                 new ValueParserAdapter()
                         .addParsers(new StringParser(), new BooleanParser(), new IntegerParser(), new PropertyParser())
+        );
+        basicQuerySerializer.setValuePrinterAdapter(
+                new ValuePrinterAdapter()
+                        .addPrinters(new StringPrinter(), new PropertyPrinter(), new ObjectPrinter())
         );
     }
 
@@ -106,5 +113,24 @@ class BasicQuerySerializerTest {
     })
     public void testFormatQueryString(String expression, String result) {
         assertEquals(result.trim(), basicQuerySerializer.formatQueryString(expression));
+    }
+
+    @ParameterizedTest
+    @MethodSource("deSerializeProvider")
+    void deSerialize(String result, Expression expression) {
+        assertEquals(result, basicQuerySerializer.deserialize(expression));
+    }
+
+    private static Stream<Arguments> deSerializeProvider() {
+        return Stream.of(
+                arguments("1 = 1", value(1).equalTo(value(1)).build()),
+                arguments("( color = 'red' ) and ( nationality = 'nigerian' )", expression(
+                        property("color").equalTo(value("red"))
+                ).and(
+                        property("nationality").equalTo(value("nigerian"))
+                        ).build()
+                ),
+                arguments("color = 'red'", property("color").equalTo(value("red")).build())
+        );
     }
 }

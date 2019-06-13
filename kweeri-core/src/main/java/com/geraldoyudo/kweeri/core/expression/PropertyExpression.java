@@ -14,6 +14,10 @@ public class PropertyExpression implements Expression<Object> {
         this.property = property;
     }
 
+    public String getProperty() {
+        return property;
+    }
+
     @Override
     public Object evaluate(Object context) {
         try {

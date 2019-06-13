@@ -8,4 +8,8 @@ public interface Operator<T> extends Expression<T> {
     void setLeft(Expression<?> expression);
 
     void setRight(Expression<?> expression);
+
+    Expression<?> getLeft();
+
+    Expression<?> getRight();
 }

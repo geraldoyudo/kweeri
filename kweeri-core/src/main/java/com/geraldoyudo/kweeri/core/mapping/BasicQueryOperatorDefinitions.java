@@ -10,12 +10,14 @@ import java.util.Optional;
 public class BasicQueryOperatorDefinitions {
 
     private Map<String, Long> operatorMap = new HashMap<>();
+    private Map<Long, String> reverseMap = new HashMap<>();
     private Map<Long, Class<? extends Operator>> operatorClass = new HashMap<>();
 
 
     public BasicQueryOperatorDefinitions defineOperator(Operator operator, String string) {
         operatorMap.put(string, operator.operatorId());
         operatorClass.put(operator.operatorId(), operator.getClass());
+        reverseMap.put(operator.operatorId(), string);
         return this;
     }
 
@@ -25,6 +27,10 @@ public class BasicQueryOperatorDefinitions {
 
     public Optional<Long> toOperatorId(String string) {
         return Optional.ofNullable(operatorMap.get(string));
+    }
+
+    public Optional<String> toOperatorString(long operatorId) {
+        return Optional.ofNullable(reverseMap.get(operatorId));
     }
 
     public String getOperatorsPattern() {

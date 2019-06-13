@@ -9,6 +9,10 @@ public class ObjectExpression implements Expression<Object> {
         this.object = object;
     }
 
+    public Object getObject() {
+        return object;
+    }
+
     @Override
     public Object evaluate(Object context) {
         return object;
