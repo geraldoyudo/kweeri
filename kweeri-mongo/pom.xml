@@ -4,13 +4,13 @@
 
     <groupId>com.geraldoyudo.kweeri</groupId>
     <artifactId>kweeri-mongo</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>Kweeri Mongo</name>
     <description>Converter to convert dynamic queries to mongo json queries</description>
     <parent>
         <groupId>com.geraldoyudo.kweeri</groupId>
         <artifactId>kweeri</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.geraldoyudo.kweeri</groupId>
             <artifactId>kweeri-core</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
