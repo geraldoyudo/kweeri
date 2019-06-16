@@ -3,15 +3,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.geraldoyudo.kweeri</groupId>
-    <artifactId>kweeri-core</artifactId>
+    <artifactId>kweeri-mongo</artifactId>
     <version>0.0.2-SNAPSHOT</version>
+    <name>Kweeri Mongo</name>
+    <description>Converter to convert dynamic queries to mongo json queries</description>
     <parent>
         <groupId>com.geraldoyudo.kweeri</groupId>
         <artifactId>kweeri</artifactId>
         <version>0.0.2-SNAPSHOT</version>
     </parent>
-    <name>Kweeri Core</name>
-    <description>Library for building dynamic query syntax systems and converters</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -21,14 +21,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.8.1</version>
+            <groupId>com.geraldoyudo.kweeri</groupId>
+            <artifactId>kweeri-core</artifactId>
+            <version>0.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>1.9.3</version>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20160807</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -37,17 +37,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.1</version>
-            </plugin>
-        </plugins>
-    </build>
 </project>
