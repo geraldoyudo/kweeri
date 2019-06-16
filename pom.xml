@@ -7,6 +7,7 @@
     <groupId>com.geraldoyudo.kweeri</groupId>
     <artifactId>kweeri</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <modules>
         <module>kweeri-core</module>
