@@ -4,7 +4,7 @@
 
     <groupId>com.geraldoyudo.kweeri</groupId>
     <artifactId>kweeri</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Kweeri</name>
     <description>A library for building dynamic, database agnostic queries</description>
