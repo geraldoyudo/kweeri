@@ -4,17 +4,17 @@
 
     <groupId>com.geraldoyudo.kweeri</groupId>
     <artifactId>kweeri-core</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
     <parent>
         <groupId>com.geraldoyudo.kweeri</groupId>
         <artifactId>kweeri</artifactId>
-        <version>0.0.2-SNAPSHOT</version>
+        <version>0.0.4-SNAPSHOT</version>
     </parent>
     <name>Kweeri Core</name>
     <description>Library for building dynamic query syntax systems and converters</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
         <junit.jupiter.version>5.4.2</junit.jupiter.version>
     </properties>
